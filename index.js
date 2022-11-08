@@ -54,6 +54,24 @@ run();
 const ProductsCollection = client.db("korai").collection("products");
 const UserCollection = client.db("korai").collection("users");
 
+//jwt  request
+app.post("/jwt", (req, res) => {
+  try {
+    const user = req.body;
+    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "1d",
+    });
+    console.log(token);
+    res.send({ token });
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 //created data in product page
 app.get("/product", async (req, res) => {
   try {

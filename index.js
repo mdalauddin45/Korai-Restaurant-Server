@@ -52,7 +52,7 @@ async function run() {
 run();
 
 const ProductsCollection = client.db("korai").collection("products");
-const UserCollection = client.db("korai").collection("users");
+const ReviewCollecton = client.db("korai").collection("reviews");
 
 //jwt  request
 app.post("/jwt", (req, res) => {
@@ -129,6 +129,23 @@ app.post("/product", async (req, res) => {
         error: "could not create the product",
       });
     }
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+//Review Api
+app.post("/review", async (req, res) => {
+  try {
+    const result = await ReviewCollecton.insertOne(req.body);
+    res.send({
+      success: true,
+      data: result,
+    });
   } catch (error) {
     console.log(error.name, error.message);
     res.send({

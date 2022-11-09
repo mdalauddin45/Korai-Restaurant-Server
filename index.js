@@ -158,6 +158,10 @@ app.post("/review", async (req, res) => {
 
 //get review item [created]
 app.get("/review", verifyJWT, async (req, res) => {
+  const decoded = req.decoded;
+  if (decoded.email !== req.query.email) {
+    res.status(403).send({ message: "unauthorized access" });
+  }
   let query = {};
   try {
     if (req.query.email) {

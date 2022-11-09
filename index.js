@@ -177,7 +177,6 @@ app.get("/review", async (req, res) => {
 });
 
 // dalete in review item
-//delet product at a id
 app.delete("/review/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -187,6 +186,54 @@ app.delete("/review/:id", async (req, res) => {
       res.send({
         success: true,
         message: "delete Succesfully",
+      });
+    }
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+// go to  updated id
+app.get("/review/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const review = await ReviewCollecton.findOne({ _id: id });
+    // console.log(review);
+    res.send({
+      success: true,
+      message: "Updated Succesfully",
+      data: review,
+    });
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// updated Now
+app.patch("/review/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await ReviewCollecton.updateOne(
+      { _id: id },
+      { $set: req.body }
+    );
+    console.log(result);
+    if (result.matchedCount) {
+      res.send({
+        success: true,
+        message: "Update Succesfully",
+      });
+    } else {
+      res.send({
+        success: false,
+        error: "could not Update the product",
       });
     }
   } catch (error) {

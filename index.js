@@ -157,7 +157,7 @@ app.post("/review", async (req, res) => {
 });
 
 //get review item [created]
-app.get("/review", async (req, res) => {
+app.get("/review", verifyJWT, async (req, res) => {
   let query = {};
   try {
     if (req.query.email) {

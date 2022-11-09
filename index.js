@@ -61,7 +61,7 @@ app.post("/jwt", (req, res) => {
     const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1d",
     });
-    console.log(token);
+    // console.log(token);
     res.send({ token });
   } catch (error) {
     console.log(error.name, error.message);
@@ -158,8 +158,14 @@ app.post("/review", async (req, res) => {
 
 //get review item [created]
 app.get("/review", async (req, res) => {
+  let query = {};
   try {
-    const cursor = ReviewCollecton.find({});
+    if (req.query.email) {
+      query = {
+        email: req.query.email,
+      };
+    }
+    const cursor = ReviewCollecton.find(query);
     const reviews = await cursor.toArray();
     // console.log(products);
     res.send({

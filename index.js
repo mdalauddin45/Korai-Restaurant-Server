@@ -138,7 +138,8 @@ app.post("/product", async (req, res) => {
   }
 });
 
-//Review Api
+//Review
+// post in review
 app.post("/review", async (req, res) => {
   try {
     const result = await ReviewCollecton.insertOne(req.body);
@@ -155,6 +156,47 @@ app.post("/review", async (req, res) => {
   }
 });
 
+//get review item [created]
+app.get("/review", async (req, res) => {
+  try {
+    const cursor = ReviewCollecton.find({});
+    const reviews = await cursor.toArray();
+    // console.log(products);
+    res.send({
+      success: true,
+      message: `successfuly got the data`,
+      data: reviews,
+    });
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// dalete in review item
+//delet product at a id
+app.delete("/review/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await ReviewCollecton.deleteOne({ _id: id });
+    console.log(result);
+    if (result.deletedCount) {
+      res.send({
+        success: true,
+        message: "delete Succesfully",
+      });
+    }
+  } catch (error) {
+    console.log(error.name, error.message);
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
 app.get("/", (req, res) => {
   res.send("korai resturent assignment is running");
 });
